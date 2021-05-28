@@ -4,6 +4,7 @@ import {
   Switch,
   Redirect,
 } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Landing from './pages/Landing';
 

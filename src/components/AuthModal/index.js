@@ -19,18 +19,33 @@ export async function signUp(logo) {
       showDenyButton: true,
       denyButtonText: 'Cancel',
       confirmButtonText: 'Submit',
-      preConfirm: () => {
-        return {
-         username: document.getElementById('swal-input2').value,
-         email: document.getElementById('swal-input1').value,
-        };
+      preConfirm: async () => {
+        try {
+          const response = await axios({
+            method: 'POST',
+            baseURL: process.env.REACT_APP_SERVER_URL,
+            url: '/users/',
+            data: {
+              email: document.getElementById('swal-input1').value,
+              name: document.getElementById('swal-input2').value,
+              password: document.getElementById('swal-input3').value,
+            },
+          });
+          localStorage.setItem('token', response.data.emailToken)
+          return {
+            username: document.getElementById('swal-input2').value,
+            email: document.getElementById('swal-input1').value,
+           };
+        } catch(err) {
+          await Swal.fire({ icon:'error', title:'Something went wrong. Try again later'})
+        }
       },
     });
     if(value) {
       return value.value;
     };
   } catch {
-    return
-  }
+    return;
+  };
 };
 

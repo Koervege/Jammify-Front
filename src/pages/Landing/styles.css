@@ -1,0 +1,69 @@
+.container1 {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.mt-5 {
+  padding: 1.5%;
+  background: linear-gradient(120deg, #ffffff 5%, #2c73a1 55%, #ffffff 100%);
+}
+
+.botBar {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3%;
+  background: linear-gradient(120deg, #2980B9 5%, #0D476E 55%, #52BAFF 100%);
+  color: white;
+  text-align: center;
+}
+
+.ptext {
+  font-size: 1.2vw;
+}
+
+.h1 {
+  font-size: 3vw;
+}
+
+.h2 {
+  font-size: 2.3vw;
+}
+
+.presetContainer {
+  padding: 1.5%;
+}
+
+.presetMenu {
+  border-style: solid;
+  border-width: medium;
+  border-color: #358cc7;
+}
+
+.ReactPiano__Key--active.ReactPiano__Key--accidental {
+  background: #358cc7;
+}
+.ReactPiano__Key--active.ReactPiano__Key--natural {
+  background: #318ac5;
+}
+
+
+.false .ReactPiano__Key--accidental {
+  background: #025d7d;
+  border: 1px solid #888;
+}
+.false .ReactPiano__Key--natural {
+  background: #013243;
+  border: 1px solid #888;
+  margin-right: 0;
+}
+.false .ReactPiano__Key--active.ReactPiano__Key--accidental {
+  background: #0396ca;
+}
+.false .ReactPiano__Key--active.ReactPiano__Key--natural {
+  background: #0396ca;
+}
+
