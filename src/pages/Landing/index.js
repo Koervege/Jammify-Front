@@ -2,13 +2,14 @@ import { Piano, KeyboardShortcuts, MidiNumbers } from 'react-piano';
 import 'react-piano/dist/styles.css';
 import DimensionsProvider from '../../components/DimensionsProvider';
 import SoundfontProvider from '../../components/SoundFontProvider';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import logo from '../../Jammify-logo.png';
 import Navbar from '../../components/Navbar';
 import { data } from '../../instruments'
-import { signUp } from '../../components/AuthModal'
+import { signUp, login } from '../../components/AuthModal'
 import Button from 'react-bootstrap/Button';
 import './styles.css';
+import axios from 'axios';
 
 function Landing() {
 
@@ -37,15 +38,44 @@ function Landing() {
   const presetList = data.instruments;
   const [activePreset, setActivePreset] = useState(presetList[2]);
   const [isMenuOpen, toggleMenu] = useState(false);
-  const [activeUser, setActiveUser] = useState(null)
-  const [activeTheme, setActiveTheme] = useState(true)
+  const [activeUser, setActiveUser] = useState(null);
+  const [activeTheme, setActiveTheme] = useState(true);
+
+  
+  async function signin() {
+    try {
+      const user = await login(logo);
+      setActiveUser(user);
+    } catch {
+      return;
+    };
+  };
 
   async function register() {
-    try{
-      const newUser = await signUp(logo)
+    try {
+      const newUser = await signUp(logo);
       setActiveUser(newUser);
     } catch {
-      return
+      return;
+    };
+  };
+
+  async function getLoggedUser() {
+
+    const token = localStorage.getItem('token');
+    try {
+      const response = await axios({
+        method: 'GET',
+           baseURL: process.env.REACT_APP_SERVER_URL,
+           url: '/users/info',
+           headers: {
+            Authorization: `Bearer ${token}`,
+          },
+      });
+      setActiveUser(response.data);
+    } catch {
+      localStorage.removeItem('token');
+      return;
     };
   };
 
@@ -74,6 +104,14 @@ function Landing() {
     );
   };
 
+  useEffect( () => {
+
+    if(!activeUser && localStorage.getItem('token')) {
+      getLoggedUser();
+    }
+
+  }, [])
+
   return (
     <main className="main">
       <Navbar></Navbar>
@@ -81,12 +119,23 @@ function Landing() {
         <img src={logo} alt='Jammify logo'></img>
         <h1 className="h1">Welcome to Jammify!</h1>
         <h2 className="h2">Start Jamming!</h2>
-        <p className="ptext">Press the keys on your keyboard to press the corresponding key on the virtual piano.
-          {activeUser ? ` Hi, ${activeUser.username}. You'll find all the preset sounds below the piano. Enjoy your stay! ` : ` Log in or Sign Up to unlock more sounds!`} </p>
-        <div>
-          <Button variant="outline-primary" onClick={() => register()}>Sign up</Button>
-          <Button variant="outline-primary" onClick={() => register()}>Log in</Button>
-        </div>
+        { activeUser ? 
+          (
+            <p className="ptext">Press the keys on your <span className="span1">keyboard</span> to press the corresponding key on the virtual piano.
+              Hi, <span className="userSpan">{activeUser.username}</span>. You'll find all the preset sounds below the piano. Enjoy your stay!
+            </p>
+          )
+          : 
+          (<>
+            <p className="ptext">Press the keys on your <span className="span1">keyboard</span> to press the corresponding key on the virtual piano. 
+              Log in or Sign up to unlock more sounds!
+            </p>
+            <div>
+              <Button variant="outline-primary" onClick={() => register()}>Sign up</Button>
+              <Button variant="outline-primary" onClick={() => signin()}>Log in</Button>
+            </div>
+          </>)
+        }
       </section>
 
       <section className="mt-5">

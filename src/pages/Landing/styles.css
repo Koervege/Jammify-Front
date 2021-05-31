@@ -37,6 +37,15 @@
   padding: 1.5%;
 }
 
+.span1 {
+  color: #358cc7;
+}
+
+.userSpan {
+  color: #358cc7;
+  font-weight: bold;
+}
+
 .presetMenu {
   border-style: solid;
   border-width: medium;
