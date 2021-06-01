@@ -105,12 +105,11 @@ function Landing() {
   };
 
   useEffect( () => {
-
     if(!activeUser && localStorage.getItem('token')) {
       getLoggedUser();
     }
 
-  }, [])
+  }, [activeUser])
 
   return (
     <main className="main">
